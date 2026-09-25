@@ -3,6 +3,7 @@ import { getAuth } from "firebase-admin/auth";
 import { app } from "../configs/firebase";
 import { User } from "../model/user.model";
 import redis from "../../../../shared/redis/redis.js"
+import { log } from "console";
 
 
 export const login = async(req:Request,res:Response)=>{
@@ -33,6 +34,7 @@ export const login = async(req:Request,res:Response)=>{
         return res.status(201).json({success:true,user})
 
     } catch (error) {
+        console.log(error)
          return res.status(500).json({success:false,message:"Login failed"})
     }
 }

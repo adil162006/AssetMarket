@@ -4,7 +4,31 @@ import { Button } from '@/components/ui/button'
 import {X,Menu} from "lucide-react"
 import  {FcGoogle} from "react-icons/fc"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, provider } from '@/utils/firebase'
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/redux/store"
+import { setUser } from "@/redux/userSlice"
+import api from '@/utils/axios'
 const Home = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const googleAuth = async () => {
+    try {
+      const result = await signInWithPopup(auth,provider);
+      const token = await result.user?.getIdToken()
+
+      const response = await  api.post("/api/auth/login",{token})
+      setModelOpen(false)
+       if (response.data.success) {
+        dispatch(setUser(response.data.user))
+      }
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+  }
   const [openMenu,setOpenMenu] = useState(false)
   const[modelOpen,setModelOpen]=useState(false)
   return (
@@ -42,7 +66,7 @@ const Home = () => {
               AssetMarket
             </DialogTitle>
           </DialogHeader>
-          <Button variant="outline" className="mt-2 w-full gap-2">
+          <Button variant="outline" className="mt-2 w-full gap-2" onClick={googleAuth}>
             <FcGoogle className='w-4 h-4'>
             </FcGoogle>
               Continue with Google

@@ -71,7 +71,7 @@ const userSchema = new mongoose.Schema<IUser>(
             slug: {
                 type: String,
                 unique: true,
-                index: true,
+                sparse:true
             },
 
             bio: {

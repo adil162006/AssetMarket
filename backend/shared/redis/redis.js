@@ -1,21 +1,19 @@
-import redis, { Redis } from "ioredis"
-import { error } from "node:console";
-import { connect } from "node:http2"
+import Redis from "ioredis"
 
-const redis = new Redis(
+const redisClient = new Redis(
     process.env.REDIS_URL || "redis://localhost:6379",
     {
         maxRetriesPerRequest:null
     }
 )
 
-redis.on("connect",()=>{
+redisClient.on("connect",()=>{
     console.log("redis connected");
     
 })
-redis.on("error",(error)=>{
+redisClient.on("error",(error)=>{
     console.log("redis error",error);
     
 })
 
-export default redis
+export default redisClient
